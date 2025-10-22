@@ -25,13 +25,13 @@ import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: "key.env"); // مهم جداً
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
   final prefs = await SharedPreferences.getInstance();
   final bool logged = prefs.getBool('logged') ?? false; // تحديد حالة الدخول
   Stripe.publishableKey = StripKeyApi.publishableKey;
+
   await Stripe.instance.applySettings();
-  await dotenv.load(fileName: "key.env"); // مهم جداً
   runApp(MyApp(logged: logged)); //  تمرير القيمة
 }
 

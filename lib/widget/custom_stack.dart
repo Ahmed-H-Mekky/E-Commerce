@@ -5,6 +5,7 @@ import 'package:e_commerce/helps/showe_snake_bare.dart';
 import 'package:e_commerce/model/model_product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class CustomStack extends StatelessWidget {
   CustomStack({super.key, required this.data});
@@ -129,7 +130,18 @@ class CustomStack extends StatelessWidget {
               height: 150,
               child: ClipRRect(
                 borderRadius: BorderRadiusGeometry.circular(12),
-                child: Image.network(data.image, fit: BoxFit.fill),
+                child: CachedNetworkImage(
+                  imageUrl: data.image,
+                  fit: BoxFit.fill,
+                  width: 120,
+                  height: 150,
+                  memCacheWidth: 120,
+                  memCacheHeight: 150,
+                  placeholder: (context, url) =>
+                      Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                  errorWidget: (context, url, error) =>
+                      Icon(Icons.broken_image),
+                ),
               ),
             ),
           ),

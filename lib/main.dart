@@ -14,8 +14,11 @@ import 'package:e_commerce/cubit/cubitGet/cubit/cuibte_category_name.dart';
 import 'package:e_commerce/cubit/cubitGet/cubit/cuibte_get.dart';
 import 'package:e_commerce/cubit/cubitSwitchPage/cubit/cubit_switch_page.dart';
 import 'package:e_commerce/cubit/cubitTimer/cubit/cubit_timer.dart';
+import 'package:e_commerce/stripe_payment/strip_key_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,9 +28,11 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   final prefs = await SharedPreferences.getInstance();
-  final bool logged = prefs.getBool('logged') ?? false; // ✅ تحديد حالة الدخول
-
-  runApp(MyApp(logged: logged)); // ✅ تمرير القيمة
+  final bool logged = prefs.getBool('logged') ?? false; // تحديد حالة الدخول
+  Stripe.publishableKey = StripKeyApi.publishableKey;
+  await Stripe.instance.applySettings();
+  await dotenv.load(fileName: "key.env"); // مهم جداً
+  runApp(MyApp(logged: logged)); //  تمرير القيمة
 }
 
 class MyApp extends StatelessWidget {
